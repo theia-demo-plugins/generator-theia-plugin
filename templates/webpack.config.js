@@ -35,7 +35,7 @@ module.exports = {
         filename: '<%= params.pluginDistPath %>',
         <% if (params.isFrontend) { %>
         libraryTarget: "var",
-        library: "simplePlugin",
+        library: "<%= params.frontendModuleName %>",
         <%} %>        
         path: path.resolve(__dirname, 'dist')
     },

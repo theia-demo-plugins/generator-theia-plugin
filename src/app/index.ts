@@ -10,19 +10,21 @@ import Base = require('yeoman-generator');
 module.exports = class TheiaPlugin extends Base {
 
     private params!: {
-        author: string
-        version: string
-        license: string
-        pluginName: string
-        pluginType: string
-        githubURL: string
-        extensionPrefix: string
-        example: boolean
-        theiaVersion: string
-        pluginSourcePath: string
-        pluginDistPath: string
-        isFrontend: boolean
-        isBackend: boolean
+        author: string;
+        publisher: string;
+        version: string;
+        license: string;
+        pluginName: string;
+        packageName: string;
+        pluginType: string;
+        githubURL: string;
+        frontendModuleName: string;
+        example: boolean;
+        theiaVersion: string;
+        pluginSourcePath: string;
+        pluginDistPath: string;
+        isFrontend: boolean;
+        isBackend: boolean;
     };
 
     constructor(args: string | string[], options: any) {
@@ -41,6 +43,11 @@ module.exports = class TheiaPlugin extends Base {
         this.option('author', {
             alias: 'a',
             description: 'The extension\'s author',
+            type: String
+        });
+        this.option('publisher', {
+            alias: 'p',
+            description: 'The publisher ID',
             type: String
         });
         this.option('version', {
@@ -127,26 +134,30 @@ module.exports = class TheiaPlugin extends Base {
     }
 
     configuring() {
-        const options = this.options as any
-        const pluginName = options.pluginName as string
-        const pluginType = options.pluginType as string
-        const pluginFullname = pluginName.split('-').map(name => this._capitalize(name)).join('');
+        const options = this.options as any;
+        const pluginName = (options.pluginName as string).replace(/\W/g, '-');
+        const pluginType = options.pluginType as string;
+        const packageName = pluginName + '-plugin';
+        const publisher = options.publisher ? options.publisher as string : 'theia';
+        const frontendModuleName = `${publisher}_${packageName}`.replace(/\W/g, '_');
         this.params = {
             author: options.author,
+            publisher: publisher,
             version: options.version,
             license: options.license,
             pluginName: pluginName,
+            packageName: packageName,
             pluginType: pluginType,
             githubURL: options.githubURL,
-            extensionPrefix: pluginFullname,
+            frontendModuleName: frontendModuleName,
             example: options.example,
             theiaVersion: options["theia-version"],
             pluginSourcePath: pluginName + '-' + pluginType + '-plugin.ts',
             pluginDistPath: pluginName + '-' + pluginType + '-plugin.js',
             isFrontend: (options.pluginType === 'frontend'),
             isBackend: (options.pluginType === 'backend')
-        }
-        options.params = this.params
+        };
+        options.params = this.params;
 
     }
 
@@ -190,7 +201,4 @@ module.exports = class TheiaPlugin extends Base {
         this.spawnCommandSync('yarn', ['build']);
     }
 
-    private _capitalize(name: string): string {
-        return name.substring(0, 1).toUpperCase() + name.substring(1)
-    }
 }

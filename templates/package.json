@@ -1,5 +1,6 @@
 {
-      "name": "<%= params.pluginName %>-plugin",
+      "name": "<%= params.packageName %>",
+      "publisher": "<%= params.publisher %>",
       "keywords": [
         "theia-plugin"
       ],
@@ -43,12 +44,15 @@
         if (params.isBackend) { %>
         "build": "tsc"<% } %>
       },
+      "engines": {
+        "theiaPlugin": "latest"
+      },
       "theiaPlugin": {
           <% if (params.isFrontend) { %>
-            "worker": "dist/<%= params.pluginDistPath %>"
+            "frontend": "dist/<%= params.pluginDistPath %>"
           <% } %>
           <% if (params.isBackend) { %>
-            "node": "lib/<%= params.pluginDistPath %>"
+            "backend": "lib/<%= params.pluginDistPath %>"
           <% } %>
       }
 }

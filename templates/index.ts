@@ -4,7 +4,7 @@
 import * as theia from '@wiptheia/plugin';
 const disposables: theia.Disposable[] = [];
 
-export function doStartThings() {
+export function start() {
     const command: theia.Command = {
         id: 'simple-plugin-command',
         label: 'Command from simple plugin'
@@ -16,7 +16,7 @@ export function doStartThings() {
     );
 }
 
-export function doStopThings(api: typeof theia) {
+export function stop(api: typeof theia) {
     while (disposables.length) {
         const disposable = disposables.pop();
         if (disposable) {
