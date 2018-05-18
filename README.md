@@ -4,7 +4,7 @@ A [Yeoman](yeoman.io) generator that scaffolds a project structure for developin
 To use it, install yo and then generator
 
 ```
-npm install -g yo generator-theia-plugin
+npm install -g yo @wiptheia/generator-theia-plugin
 ```
 
 To create a sample project with a Theia plugin, run
