@@ -10,7 +10,7 @@ npm install -g yo @wiptheia/generator-theia-plugin
 To create a sample project with a Theia plugin, run
 
 ```
-yo theia-plugin
+yo @wiptheia/theia-plugin
 ```
 
 For configuration options, see
