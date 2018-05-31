@@ -2,21 +2,125 @@
  * Generated using theia-plugin-generator
  */ 
 import * as theia from '@wiptheia/plugin';
+
 const disposables: theia.Disposable[] = [];
 
 export function start() {
-    const command: theia.Command = {
-        id: 'simple-plugin-command',
-        label: 'Command from simple plugin'
+    const quickPickTestCommand = {
+        id: 'simple-plugin-quick-pick-string-command',
+        label: "Test Quick Pick String Items"
+    }
+    disposables.push(theia.commands.registerCommand(quickPickTestCommand, (...args: any[]) => testQuickPick()));
+
+    const quickPickTestObjCommand = {
+        id: 'simple-plugin-quick-pick-object-command',
+        label: "Test Quick Pick Object Item"
+    }
+    disposables.push(theia.commands.registerCommand(quickPickTestObjCommand, (...args: any[]) => testQuickPickObject()));
+
+    const informationMessageTestCommand = {
+        id: 'frontend-plugin-information-message-command',
+        label: "Test Information Message Item"
     };
-    disposables.push(
-        theia.commands.registerCommand(command, (...args: any[]) => {
-            console.log(`>>> Simple plugin command handler was called with arguments: `, args);
-        })
-    );
+    disposables.push(theia.commands.registerCommand(informationMessageTestCommand, (...args: any[]) => {
+        theia.window.showInformationMessage('Information message!');
+    }));
+
+    const informationModalMessageTestCommand = {
+        id: 'frontend-plugin-information-modal-message-command',
+        label: "Test Information Modal Message Item"
+    };
+    disposables.push(theia.commands.registerCommand(informationModalMessageTestCommand, (...args: any[]) => {
+        theia.window.showInformationMessage('Information modal message!', {modal: true}, {title: 'action1'},
+            {title: 'action2', isCloseAffordance: true}, {title: 'action3'}).then(action => {
+            console.log('>>> resolve', action);
+        });
+    }));
+
+    const warningMessageTestCommand = {
+        id: 'frontend-plugin-warning-message-command',
+        label: "Test Warning Message Item"
+    };
+    disposables.push(theia.commands.registerCommand(warningMessageTestCommand, (...args: any[]) => {
+        theia.window.showWarningMessage('Warning message!');
+    }));
+
+    const warningModalMessageTestCommand = {
+        id: 'frontend-plugin-warning-modal-message-command',
+        label: "Test Warning Modal Message Item"
+    };
+    disposables.push(theia.commands.registerCommand(warningModalMessageTestCommand, (...args: any[]) => {
+        theia.window.showWarningMessage('Warning modal message!', {modal: true});
+    }));
+
+    const errorMessageTestCommand = {
+        id: 'frontend-plugin-error-message-command',
+        label: "Test Error Message Item"
+    };
+    disposables.push(theia.commands.registerCommand(errorMessageTestCommand, (...args: any[]) => {
+        theia.window.showErrorMessage('Error message!');
+    }));
+
+    const errorModalMessageTestCommand = {
+        id: 'frontend-plugin-error-modal-message-command',
+        label: "Test Error Modal Message Item"
+    };
+    disposables.push(theia.commands.registerCommand(errorModalMessageTestCommand, (...args: any[]) => {
+        theia.window.showErrorMessage('Error modal message!', {modal: true});
+    }));
 }
 
-export function stop(api: typeof theia) {
+function testQuickPickObject() {
+    const option: theia.QuickPickOptions = {
+        machOnDescription: true,
+        machOnDetail: true,
+        canPickMany: false,
+        placeHolder: "Select object:",
+        onDidSelectItem: (item) => console.log(`Item ${JSON.stringify(item)} is selected`)
+    };
+    theia.window.showQuickPick<theia.QuickPickItem>(new Promise((resolve)=>{
+        setTimeout(()=>{
+            resolve([
+                {
+                    label : "foo" + Math.round(Math.random()*10),
+                    description: "foo description",
+                    detail: "foo detail"
+                },
+                {
+                    label: "bar",
+                    description: "bar description",
+                    detail: "bar detail"
+                },
+                {
+                    label: "foobar",
+                    description: "foobar description",
+                    detail: "foobar detail",
+                    picked: true
+}
+            ]);
+        }, 500);
+    }), option).then((val: theia.QuickPickItem[] | undefined) => {
+        console.log(`Quick Pick Object Selected: ${JSON.stringify(val)}`);
+    });
+}
+
+function testQuickPick(): void {
+    const option: theia.QuickPickOptions = {
+        machOnDescription: true,
+        machOnDetail: true,
+        canPickMany: false,
+        placeHolder: "Select string:",
+        onDidSelectItem: (item) => console.log(`Item ${item} is selected`)
+    };
+    theia.window.showQuickPick(new Promise((resolve)=>{
+        setTimeout(()=>{
+            resolve(["foo" + Math.round(Math.random()*10), "bar", "foobar"]);
+        }, 500);
+    }), option).then((val: string[] | undefined) => {
+        console.log(`Quick Pick Selected: ${val}`);
+    });
+}
+export function stop() {
     while (disposables.length) {
         const disposable = disposables.pop();
         if (disposable) {
