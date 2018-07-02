@@ -39,6 +39,7 @@
       },
       "scripts": {
         "prepare": "yarn run clean && yarn run build",
+        "watch": "webpack-cli -w --config webpack.config.js",
         "clean": "rimraf lib",<%
         if (params.isFrontend) { %>
         "build": "tsc && webpack-cli --config webpack.config.js && theia:plugin pack"
