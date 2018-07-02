@@ -41,6 +41,6 @@ module.exports = {
     },
     externals: {
 		"@wiptheia/plugin": "theia",
-		"@heia/plugin": "theia"
+		"@theia/plugin": "theia"
 	}
 };

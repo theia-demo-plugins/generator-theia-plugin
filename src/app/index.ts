@@ -105,14 +105,14 @@ module.exports = class TheiaPlugin extends Base {
             const answers = await this.prompt([{
                 type: 'list',
                 name: 'pluginType',
-                message: 'What type of extension do you want?',
+                message: 'What type of plugin do you want?',
                 choices: [
                     {
                         name: 'Backend plugin, it will run on the server side.',
                         value: 'backend'
                     },
                     {
-                        name: 'Frontend extension, it will run on the browser side.',
+                        name: 'Frontend plugin, it will run on the browser side.',
                         value: 'frontend'
                     }
                 ]
@@ -186,6 +186,11 @@ module.exports = class TheiaPlugin extends Base {
             this.templatePath('index.ts'),
             this.destinationPath('src/' + this.params.pluginName + '-' + this.params.pluginType + '-plugin.ts'),
             { params: this.params }
+        );
+        this.fs.copyTpl(
+            this.templatePath('src/'),
+            this.destinationPath('src'),
+            {params: this.params}
         );
         if (this.params.isFrontend) {
             this.fs.copyTpl(
